@@ -5,12 +5,10 @@
 // @version      0.0.1
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=getbootstrap.com
 // @description  Set of examples for ShadowBootstrap
-// @require      https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.0.1/shadow-bootstrap.js
+// @require      https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.0.1/shadow-bootstrap.min.js
 // @match        *://*/*
 // @grant        none
 // ==/UserScript==
-
-
 
 class CenteredWindow extends SBWin {
   constructor(hide = false) {
@@ -22,8 +20,11 @@ class CenteredWindow extends SBWin {
         <div class="settings card shadow" style="pointer-events: auto">
           <div class="card-header p-0 ps-2 d-flex justify-content-between align-items-center">
             <span>Settings</span>
-            <button class="settings-close-btn btn btn-sm btn-light rounded-circle" type="button">
-              <i class="bi bi-x"></i>
+            <button class="settings-close-btn btn btn-sm btn-light rounded" type="button">
+              <!-- <i class="bi bi-x"></i> -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+</svg>
             </button>
           </div>
           <div class="card-body px-4">
@@ -78,7 +79,10 @@ class FloatingButton extends SBWin {
     const htmlString = `
       <div class="floating-button-container position-fixed bottom-0 end-0" style="pointer-events: auto">
         <button class="floating-button-btn btn btn-primary rounded-circle m-3 z-3 w-3 h-3" style="width: 60px; height: 60px; font-size: 24px">
-          <i class="bi bi-plus-lg"></i>
+          <!-- <i class="bi bi-plus-lg"></i> -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+</svg>
         </button>
       </div>
     `;
