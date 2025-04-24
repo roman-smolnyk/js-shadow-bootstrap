@@ -57,7 +57,8 @@ class ShadowBootstrap {
 
   static bootstrapJs = async (raw = true) => {
     if (window.bootstrap) {
-      throw new Error("Bootstrap js is already loaded.");
+      console.warn("Bootstrap js is already loaded.");
+      // throw new Error("Bootstrap js is already loaded.");
     }
     const bootstrapScript = document.createElement("script");
     if (raw === false) {
@@ -135,5 +136,38 @@ class SBWin {
 
   getEl(selector) {
     return this.rootEl.querySelector(selector);
+  }
+}
+
+class SBPopUp {
+  constructor(text, color = "success") {
+    const htmlString = `
+        <div class="position-fixed top-0 start-50 translate-middle-x p-3 w-100" style="max-width: 360px; z-index: 1055">
+      <div id="myToast" class="toast align-items-center text-bg-${color} border-0 w-100" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+        <div class="d-flex">
+          <div class="toast-body">${text}</div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
+    `;
+    this.rootEl = this._parse(htmlString);
+  }
+
+  _parse(htmlString) {
+    const parser = new DOMParser();
+    return parser.parseFromString(htmlString, "text/html").body.firstChild;
+  }
+
+  show() {
+    const toastEl = this.rootEl.querySelector(".toast");
+    const toast = new bootstrap.Toast(toastEl);
+    toast.show();
+    toastEl.addEventListener("hidden.bs.toast", () => {
+      // this.rootEl.remove();
+      setTimeout(() => {
+        this.rootEl.remove;
+      }, 500);
+    });
   }
 }
