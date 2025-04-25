@@ -2,10 +2,10 @@
 // @name         ShadowBootstrap
 // @namespace    http://tampermonkey.net/
 // @author       poma23324
-// @version      0.0.1
+// @version      0.0.2
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=getbootstrap.com
 // @description  Set of examples for ShadowBootstrap
-// @require      https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.0.2/shadow-bootstrap.min.js
+// @require      https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.0.3/shadow-bootstrap.min.js
 // @require      https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js
 // @match        *://*/*
 // @grant        none
@@ -47,10 +47,6 @@ class CenteredWindow extends SBWin {
       </div>
     `;
     super(htmlString);
-    if (hide === true) {
-      this.hide();
-    }
-
     this.addEventListeners();
   }
 
@@ -110,12 +106,104 @@ class FloatingButton extends SBWin {
   };
 }
 
+class SideButton extends SBWin {
+  constructor(hide = false) {
+    const htmlString = `
+    <div>
+    <div class="side-button-container ps-4 position-fixed opacity-25 bg-success rounded-2" style="top: 50%; right: -0px; transition: right 0.3s">
+      <button class="side-button-btn2 btn btn-primary">X</button>
+      <button class="side-button-btn btn btn-primary">Y</button>
+    </div>
+    </div>
+    `;
+    super(htmlString);
+    if (hide === true) {
+      this.hide();
+    }
+
+    this.addEventListeners();
+  }
+
+  addEventListeners = () => {
+    const buttonContainer = this.getEl(".side-button-container");
+    let isVisible = false;
+    let isDragging = false;
+    let offsetY = 0;
+
+    let maxWidth = 0;
+    this.rootEl.querySelectorAll("button").forEach((btn) => {
+      const btnWidth = btn.getBoundingClientRect().width;
+      if (btnWidth > maxWidth) maxWidth = btnWidth;
+    });
+
+    buttonContainer.style.right = `-${maxWidth}px`;
+
+    buttonContainer.addEventListener("click", (e) => {
+      if (isDragging) {
+        // isDragging = false;
+        return;
+      }
+      isVisible = !isVisible;
+      buttonContainer.style.right = isVisible ? "0px" : "-90px";
+      if (isVisible) {
+        buttonContainer.classList.remove("opacity-25");
+        buttonContainer.classList.add("opacity-100");
+      } else {
+        buttonContainer.classList.remove("opacity-100");
+        buttonContainer.classList.add("opacity-25");
+      }
+      e.preventDefault();
+    });
+
+    buttonContainer.addEventListener("mousedown", function (e) {
+      isDragging = true;
+      const rect = buttonContainer.getBoundingClientRect();
+      offsetY = e.clientY - rect.top;
+      e.preventDefault(); // Prevent text selection
+    });
+
+    document.addEventListener("mousemove", function (e) {
+      if (!isDragging) return;
+
+      // Calculate new position for the button container
+      const y = e.clientY - offsetY;
+
+      // Keep button container within the viewport
+      const maxY = window.innerHeight - buttonContainer.offsetHeight;
+      const clampedY = Math.max(0, Math.min(y, maxY));
+
+      buttonContainer.style.top = `${clampedY}px`;
+    });
+
+    document.addEventListener("mouseup", function () {
+      isDragging = false;
+    });
+
+    buttonContainer.addEventListener("mouseenter", function () {
+      // TODO Open
+      // buttonContainer.style.right = "0px";
+      // isVisible = true;
+      buttonContainer.classList.remove("opacity-25");
+      buttonContainer.classList.add("opacity-100");
+    });
+
+    buttonContainer.addEventListener("mouseleave", function () {
+      if (!isVisible) {
+        buttonContainer.classList.remove("opacity-100");
+        buttonContainer.classList.add("opacity-25");
+      }
+    });
+  };
+}
+
 (async function () {
   "use strict";
 
-  const shadowContainer = await ShadowBootstrap.init();
+  await ShadowBootstrap.init();
 
-  shadowContainer.append(new CenteredWindow().rootEl);
-  shadowContainer.append(new FloatingButton().rootEl);
+  ShadowBootstrap.add(new FloatingButton());
+  ShadowBootstrap.add(new CenteredWindow());
+  ShadowBootstrap.add(new SideButton());
+
   console.log(SBWin.get(FloatingButton).rootEl);
 })();

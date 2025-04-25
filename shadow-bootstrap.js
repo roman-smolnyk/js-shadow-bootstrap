@@ -74,13 +74,15 @@ class ShadowBootstrap {
     // Create container and attach to body
     const shadowHost = document.createElement("div");
     document.body.appendChild(shadowHost);
-    shadowHost.style.position = "fixed";
-    shadowHost.style.top = "0";
-    shadowHost.style.left = "0";
-    shadowHost.style.width = "100vw";
-    shadowHost.style.height = "100vh";
-    shadowHost.style.zIndex = "99999";
-    shadowHost.style.pointerEvents = "none"; // Let clicks through except content
+    Object.assign(shadowHost.style, {
+      position: "fixed",
+      top: "0",
+      left: "0",
+      width: "100vw",
+      height: "100vh",
+      zIndex: "99999",
+      pointerEvents: "none", // Let clicks through except content
+    });
     shadowHost.classList.add(ShadowBootstrap.SHADOW_HOST_CLASS);
 
     const shadowRoot = shadowHost.attachShadow({ mode: "open" });
@@ -103,12 +105,18 @@ class ShadowBootstrap {
 
     return shadowContainer;
   };
+
+  static add = (win) => {
+    ShadowBootstrap.SHADOW_CONTAINER.append(win.rootEl);
+  };
 }
 
 class SBWin {
   static MAP = new Map();
   constructor(htmlString) {
     this.rootEl = this._parse(htmlString);
+    this.rootEl.style.pointerEvents = "auto";
+
     SBWin.MAP.set(this.constructor, this);
   }
 
