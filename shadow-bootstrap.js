@@ -125,7 +125,7 @@ class ShadowBootstrap {
 class SBWin {
   constructor(htmlString) {
     this.rootEl = this._parse(htmlString);
-    this.rootEl.style.pointerEvents = "auto";
+    // this.rootEl.style.pointerEvents = "auto";
   }
 
   init = async () => {};

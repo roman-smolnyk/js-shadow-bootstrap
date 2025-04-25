@@ -5,7 +5,7 @@
 // @version      0.0.2
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=getbootstrap.com
 // @description  Set of examples for ShadowBootstrap
-// @require      https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.0.5/shadow-bootstrap.min.js
+// @require      https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.0.6/shadow-bootstrap.min.js
 // @require      https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js
 // @match        *://*/*
 // @grant        none
@@ -109,11 +109,11 @@ class FloatingButton extends SBWin {
 class SideButton extends SBWin {
   constructor(hide = false) {
     const htmlString = `
-    <div>
-    <div class="side-button-container position-fixed opacity-25 bg-success rounded-2" style="top: 50%; transition: right 0.3s">
-      <button class="toggle-button-btn btn btn-primary">X</button>
-      <button class="action-button-btn btn btn-primary">Y</button>
-    </div>
+    <div style="pointer-events: auto">
+      <div class="side-button-container d-flex position-fixed opacity-25 bg-primary rounded-start" style="top: 50%; transition: right 0.3s">
+        <button class="toggle-button-btn btn btn-primary rounded-0 rounded-start">⠀</button>
+        <button class="action-button-btn btn btn-success">Click</button>
+      </div>
     </div>
     `;
     super(htmlString);
@@ -128,23 +128,23 @@ class SideButton extends SBWin {
 
   addEventListeners = () => {
     const buttonContainer = this.getEl(".side-button-container");
+    const toggleButton = this.getEl(".toggle-button-btn");
+    const actionButton = this.getEl(".action-button-btn");
     let isVisible = false;
     let isDragging = false;
     let offsetY = 0;
 
     let maxWidth = 0;
-    this.rootEl.querySelectorAll("button").forEach((btn) => {
+    this.rootEl.querySelectorAll(".action-button-btn").forEach((btn) => {
       const btnWidth = btn.getBoundingClientRect().width;
       if (btnWidth > maxWidth) maxWidth = btnWidth;
     });
 
     buttonContainer.style.right = `-${maxWidth}px`;
 
-    buttonContainer.addEventListener("click", (e) => {
-      if (isDragging) {
-        // isDragging = false;
-        return;
-      }
+    toggleButton.addEventListener("click", (e) => {
+      // if (isDragging) return;
+
       isVisible = !isVisible;
       buttonContainer.style.right = isVisible ? "0px" : `-${maxWidth}px`;
       if (isVisible) {
@@ -157,7 +157,7 @@ class SideButton extends SBWin {
       e.preventDefault();
     });
 
-    buttonContainer.addEventListener("mousedown", function (e) {
+    toggleButton.addEventListener("mousedown", function (e) {
       isDragging = true;
       const rect = buttonContainer.getBoundingClientRect();
       offsetY = e.clientY - rect.top;
