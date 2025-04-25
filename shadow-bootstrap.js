@@ -19,6 +19,7 @@ class ShadowBootstrap {
   static SHADOW_CONTAINER_CLASS = "bootstrap-shadow-dom-container";
   static SHADOW_CONTAINER = null;
   static SHADOW_ROOT = null;
+  static WINDOWS = new Map();
   constructor() {}
 
   static bootstrapCss = async (raw = true) => {
@@ -108,20 +109,22 @@ class ShadowBootstrap {
 
   static add = (win) => {
     ShadowBootstrap.SHADOW_CONTAINER.append(win.rootEl);
+    ShadowBootstrap.WINDOWS.set(win.constructor, win);
+  };
+
+  static get = (win) => {
+    return ShadowBootstrap.WINDOWS.get(win);
+  };
+
+  static remove = (win) => {
+    ShadowBootstrap.WINDOWS.delete(win.constructor);
   };
 }
 
 class SBWin {
-  static MAP = new Map();
   constructor(htmlString) {
     this.rootEl = this._parse(htmlString);
     this.rootEl.style.pointerEvents = "auto";
-
-    SBWin.MAP.set(this.constructor, this);
-  }
-
-  static get(class_) {
-    return SBWin.MAP.get(class_);
   }
 
   _parse(htmlString) {
@@ -139,7 +142,7 @@ class SBWin {
 
   destroy() {
     this.rootEl.remove();
-    SBWin.MAP.delete(this);
+    ShadowBootstrap.remove(this);
   }
 
   getEl(selector) {
