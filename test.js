@@ -5,7 +5,7 @@
 // @version      0.0.2
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=getbootstrap.com
 // @description  Set of examples for ShadowBootstrap
-// @require      https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.0.6/shadow-bootstrap.min.js
+// @require      https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.0.7/shadow-bootstrap.min.js
 // @require      https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js
 // @match        *://*/*
 // @grant        none
@@ -100,7 +100,7 @@ class FloatingButton extends SBWin {
       document.body.style.backgroundColor = "lightblue";
 
       const popup = new SBPopUp("Finished");
-      ShadowBootstrap.SHADOW_CONTAINER.append(popup.rootEl);
+      ShadowBootstrap.add(popup);
       popup.show();
     });
   };
@@ -142,9 +142,12 @@ class SideButton extends SBWin {
 
     buttonContainer.style.right = `-${maxWidth}px`;
 
+    actionButton.addEventListener("click", (e) => {
+      console.log("CLIIICKKKKK");
+    });
+
     toggleButton.addEventListener("click", (e) => {
       // if (isDragging) return;
-
       isVisible = !isVisible;
       buttonContainer.style.right = isVisible ? "0px" : `-${maxWidth}px`;
       if (isVisible) {
