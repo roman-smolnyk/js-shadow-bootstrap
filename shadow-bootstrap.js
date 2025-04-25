@@ -172,11 +172,12 @@ class SBPopUp extends SBWin {
     const toastEl = this.rootEl.querySelector(".toast");
     const toast = new bootstrap.Toast(toastEl);
     toast.show();
-    toastEl.addEventListener("hidden.bs.toast", () => {
-      // this.rootEl.remove();
-      setTimeout(() => {
-        this.destroy();
-      }, 500);
-    });
+    this.destroy();
+
+    // toastEl.addEventListener("hidden.bs.toast", () => {
+    //   setTimeout(() => {
+    //     this.destroy();
+    //   }, 500);
+    // });
   };
 }
