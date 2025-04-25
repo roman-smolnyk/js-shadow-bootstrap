@@ -110,6 +110,7 @@ class ShadowBootstrap {
   static add = (win) => {
     ShadowBootstrap.SHADOW_CONTAINER.append(win.rootEl);
     ShadowBootstrap.WINDOWS.set(win.constructor, win);
+    win.init(); // This is async!!!
   };
 
   static get = (win) => {
@@ -127,27 +128,29 @@ class SBWin {
     this.rootEl.style.pointerEvents = "auto";
   }
 
-  _parse(htmlString) {
+  init = async () => {};
+
+  _parse = (htmlString) => {
     const parser = new DOMParser();
     return parser.parseFromString(htmlString, "text/html").body.firstChild;
-  }
+  };
 
-  show() {
+  show = () => {
     this.rootEl.classList.remove("d-none");
-  }
+  };
 
-  hide() {
+  hide = () => {
     this.rootEl.classList.add("d-none");
-  }
+  };
 
-  destroy() {
+  destroy = () => {
     this.rootEl.remove();
     ShadowBootstrap.remove(this);
-  }
+  };
 
-  getEl(selector) {
+  getEl = (selector) => {
     return this.rootEl.querySelector(selector);
-  }
+  };
 }
 
 class SBPopUp {

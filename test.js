@@ -5,7 +5,7 @@
 // @version      0.0.2
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=getbootstrap.com
 // @description  Set of examples for ShadowBootstrap
-// @require      https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.0.4/shadow-bootstrap.min.js
+// @require      https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.0.5/shadow-bootstrap.min.js
 // @require      https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js
 // @match        *://*/*
 // @grant        none
@@ -77,7 +77,7 @@ class FloatingButton extends SBWin {
       <div class="floating-button-container position-fixed bottom-0 end-0" style="pointer-events: auto">
         <button class="floating-button-btn btn btn-primary rounded-circle m-3 z-3 w-3 h-3" style="width: 60px; height: 60px; font-size: 24px">
           <!-- <i class="bi bi-plus-lg"></i> -->
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
   <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
 </svg>
         </button>
@@ -110,9 +110,9 @@ class SideButton extends SBWin {
   constructor(hide = false) {
     const htmlString = `
     <div>
-    <div class="side-button-container ps-4 position-fixed opacity-25 bg-success rounded-2" style="top: 50%; right: -0px; transition: right 0.3s">
-      <button class="side-button-btn2 btn btn-primary">X</button>
-      <button class="side-button-btn btn btn-primary">Y</button>
+    <div class="side-button-container position-fixed opacity-25 bg-success rounded-2" style="top: 50%; transition: right 0.3s">
+      <button class="toggle-button-btn btn btn-primary">X</button>
+      <button class="action-button-btn btn btn-primary">Y</button>
     </div>
     </div>
     `;
@@ -120,9 +120,11 @@ class SideButton extends SBWin {
     if (hide === true) {
       this.hide();
     }
-
-    this.addEventListeners();
   }
+
+  init = async () => {
+    this.addEventListeners();
+  };
 
   addEventListeners = () => {
     const buttonContainer = this.getEl(".side-button-container");
@@ -144,7 +146,7 @@ class SideButton extends SBWin {
         return;
       }
       isVisible = !isVisible;
-      buttonContainer.style.right = isVisible ? "0px" : "-90px";
+      buttonContainer.style.right = isVisible ? "0px" : `-${maxWidth}px`;
       if (isVisible) {
         buttonContainer.classList.remove("opacity-25");
         buttonContainer.classList.add("opacity-100");
@@ -205,5 +207,5 @@ class SideButton extends SBWin {
   ShadowBootstrap.add(new CenteredWindow());
   ShadowBootstrap.add(new SideButton());
 
-  console.log(SBWin.get(FloatingButton).rootEl);
+  console.log(ShadowBootstrap.get(FloatingButton).rootEl);
 })();
