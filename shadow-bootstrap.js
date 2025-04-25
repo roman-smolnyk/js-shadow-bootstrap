@@ -168,7 +168,7 @@ class SBPopUp extends SBWin {
     super(htmlString);
   }
 
-  show() {
+  show = () => {
     const toastEl = this.rootEl.querySelector(".toast");
     const toast = new bootstrap.Toast(toastEl);
     toast.show();
@@ -178,5 +178,5 @@ class SBPopUp extends SBWin {
         this.destroy();
       }, 500);
     });
-  }
+  };
 }
