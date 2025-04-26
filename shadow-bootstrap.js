@@ -22,7 +22,7 @@ class ShadowBootstrap {
   static WINDOWS = new Map();
   constructor() {}
 
-  static bootstrapCss = async (raw = true) => {
+  static async bootstrapCss(raw = true) {
     //     const testEl = document.createElement("div");
     // testEl.className = "d-none"; // A Bootstrap utility class
     // document.body.appendChild(testEl);
@@ -45,18 +45,18 @@ class ShadowBootstrap {
     // Replace :root with :host to scope variables to Shadow DOM. as root variables only apllied if it is root of the document
     bootstrapStyle.textContent = css.replace(/:root/g, ":host");
     return bootstrapStyle;
-  };
+  }
 
-  static bootstrapIconsCss = async (raw = false) => {
+  static async bootstrapIconsCss(raw = false) {
     // it does not work in shadow dom so you should add it to the main web page header
     // in case of cors issues you can use method from styleBootstrap
     const bootstrapIconsLink = document.createElement("link");
     bootstrapIconsLink.rel = "stylesheet";
     bootstrapIconsLink.href = "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css";
     return bootstrapIconsLink;
-  };
+  }
 
-  static bootstrapJs = async (raw = true) => {
+  static async bootstrapJs(raw = true) {
     if (window.bootstrap) {
       console.warn("Bootstrap js is already loaded.");
       // throw new Error("Bootstrap js is already loaded.");
@@ -69,9 +69,9 @@ class ShadowBootstrap {
       bootstrapScript.textContent = atob(__bootstapJsBase64.trim());
     }
     return bootstrapScript;
-  };
+  }
 
-  static init = async () => {
+  static async init() {
     // Create container and attach to body
     const shadowHost = document.createElement("div");
     document.body.appendChild(shadowHost);
@@ -105,21 +105,21 @@ class ShadowBootstrap {
     ShadowBootstrap.SHADOW_CONTAINER = shadowContainer;
 
     return shadowContainer;
-  };
+  }
 
-  static add = (win) => {
+  static add(win) {
     ShadowBootstrap.SHADOW_CONTAINER.append(win.rootEl);
     ShadowBootstrap.WINDOWS.set(win.constructor, win);
     win.init(); // This is async!!!
-  };
+  }
 
-  static get = (win) => {
+  static get(win) {
     return ShadowBootstrap.WINDOWS.get(win);
-  };
+  }
 
-  static remove = (win) => {
+  static del(win) {
     ShadowBootstrap.WINDOWS.delete(win.constructor);
-  };
+  }
 }
 
 class SBWin {
@@ -128,29 +128,31 @@ class SBWin {
     // this.rootEl.style.pointerEvents = "auto";
   }
 
-  init = async () => {};
+  async init() {}
 
-  _parse = (htmlString) => {
+  _parse(htmlString) {
     const parser = new DOMParser();
     return parser.parseFromString(htmlString, "text/html").body.firstChild;
-  };
+  }
 
-  show = () => {
+  show() {
     this.rootEl.classList.remove("d-none");
-  };
+    return this;
+  }
 
-  hide = () => {
+  hide() {
     this.rootEl.classList.add("d-none");
-  };
+    return this;
+  }
 
-  destroy = () => {
+  destroy() {
     this.rootEl.remove();
-    ShadowBootstrap.remove(this);
-  };
+    ShadowBootstrap.del(this);
+  }
 
-  getEl = (selector) => {
+  getEl(selector) {
     return this.rootEl.querySelector(selector);
-  };
+  }
 }
 
 class SBPopUp extends SBWin {
@@ -168,15 +170,11 @@ class SBPopUp extends SBWin {
     super(htmlString);
   }
 
-  show = () => {
+  show() {
     const toastEl = this.rootEl.querySelector(".toast");
     const toast = new bootstrap.Toast(toastEl);
     toast.show();
-
-    toastEl.addEventListener("hidden.bs.toast", () => {
-      setTimeout(() => {
-        this.destroy();
-      }, 500);
-    });
-  };
+    // prettier-ignore
+    toastEl.addEventListener("hidden.bs.toast", () => setTimeout(() => this.destroy(), 500));
+  }
 }

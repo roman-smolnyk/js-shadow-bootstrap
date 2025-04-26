@@ -5,11 +5,15 @@
 // @version      0.0.2
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=getbootstrap.com
 // @description  Set of examples for ShadowBootstrap
-// @require      https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.1.0/shadow-bootstrap.js
+// @require      https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.1.1/shadow-bootstrap.js
 // @require      https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js
 // @match        *://*/*
 // @grant        none
 // ==/UserScript==
+
+function missing(name) {
+  throw new Error(`Missing: ${name}`);
+}
 
 class CenteredWindow extends SBWin {
   constructor(hide = false) {
@@ -47,10 +51,9 @@ class CenteredWindow extends SBWin {
       </div>
     `;
     super(htmlString);
-    this.addEventListeners();
   }
 
-  addEventListeners = () => {
+  async init() {
     this.getEl("form").addEventListener("submit", async (e) => {
       console.log("submit");
       e.preventDefault();
@@ -68,7 +71,7 @@ class CenteredWindow extends SBWin {
       console.log("close");
       this.hide();
     });
-  };
+  }
 }
 
 class FloatingButton extends SBWin {
@@ -84,30 +87,22 @@ class FloatingButton extends SBWin {
       </div>
     `;
     super(htmlString);
-    if (hide === true) {
-      this.hide();
-    }
-
-    this.addEventListeners();
   }
 
-  addEventListeners = () => {
+  async init() {
     this.getEl(".floating-button-btn").addEventListener("click", async (e) => {
       console.log("click");
       e.preventDefault();
       e.stopPropagation();
 
-      document.body.style.backgroundColor = "lightblue";
-
-      const popup = new SBPopUp("Finished");
-      ShadowBootstrap.add(popup);
-      popup.show();
+      // document.body.style.backgroundColor = "lightblue";
+      ShadowBootstrap.get(CenteredWindow).show();
     });
-  };
+  }
 }
 
 class SideButton extends SBWin {
-  constructor(hide = false) {
+  constructor() {
     const htmlString = `
     <div style="pointer-events: auto">
       <div class="side-button-container d-flex position-fixed opacity-25 bg-primary rounded-start" style="top: 50%; transition: right 0.3s">
@@ -117,19 +112,12 @@ class SideButton extends SBWin {
     </div>
     `;
     super(htmlString);
-    if (hide === true) {
-      this.hide();
-    }
   }
 
-  init = async () => {
-    this.addEventListeners();
-  };
-
-  addEventListeners = () => {
-    const buttonContainer = this.getEl(".side-button-container");
-    const toggleButton = this.getEl(".toggle-button-btn");
-    const actionButton = this.getEl(".action-button-btn");
+  async init() {
+    const buttonContainer = this.getEl(".side-button-container") || missing();
+    const toggleButton = this.getEl(".toggle-button-btn") || missing();
+    const actionButton = this.getEl(".action-button-btn") || missing();
     let isVisible = false;
     let isDragging = false;
     let offsetY = 0;
@@ -143,7 +131,9 @@ class SideButton extends SBWin {
     buttonContainer.style.right = `-${maxWidth}px`;
 
     actionButton.addEventListener("click", (e) => {
-      console.log("CLIIICKKKKK");
+      const popup = new SBPopUp("Finished");
+      ShadowBootstrap.add(popup);
+      popup.show();
     });
 
     toggleButton.addEventListener("click", (e) => {
@@ -198,7 +188,7 @@ class SideButton extends SBWin {
         buttonContainer.classList.add("opacity-25");
       }
     });
-  };
+  }
 }
 
 (async function () {
@@ -206,8 +196,8 @@ class SideButton extends SBWin {
 
   await ShadowBootstrap.init();
 
+  ShadowBootstrap.add(new CenteredWindow().hide());
   ShadowBootstrap.add(new FloatingButton());
-  ShadowBootstrap.add(new CenteredWindow());
   ShadowBootstrap.add(new SideButton());
 
   console.log(ShadowBootstrap.get(FloatingButton).rootEl);
