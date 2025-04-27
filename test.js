@@ -8,6 +8,7 @@
 // @require      https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.1.1/shadow-bootstrap.js
 // @require      https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js
 // @match        *://*/*
+// @run-at context-menu
 // @grant        none
 // ==/UserScript==
 
@@ -106,7 +107,7 @@ class SideButton extends SBWin {
     const htmlString = `
     <div style="pointer-events: auto">
       <div class="side-button-container d-flex position-fixed opacity-25 bg-primary rounded-start" style="top: 50%; transition: right 0.3s">
-        <button class="toggle-button-btn btn btn-primary rounded-0 rounded-start">⠀</button>
+        <button class="toggle-button-btn btn btn-primary rounded-0 rounded-start">&nbsp;</button>
         <button class="action-button-btn btn btn-success">Click</button>
       </div>
     </div>
