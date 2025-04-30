@@ -192,6 +192,7 @@ class SideButton extends SBWin {
   }
 }
 
+// biome-ignore lint/complexity/useArrowFunction: <explanation>
 (async function () {
   "use strict";
 
