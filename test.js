@@ -2,7 +2,7 @@
 // @name         ShadowBootstrap
 // @namespace    http://tampermonkey.net/
 // @author       poma23324
-// @version      0.0.2
+// @version      0.0.3
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=getbootstrap.com
 // @description  Set of examples for ShadowBootstrap
 // @require      https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.1.2/shadow-bootstrap.js
@@ -13,12 +13,12 @@
 // ==/UserScript==
 
 function missing(name) {
-  throw new Error(`Missing: ${name}`);
+	throw new Error(`Missing: ${name}`);
 }
 
 class CenteredWindow extends SBWin {
-  constructor(hide = false) {
-    const htmlString = `
+	constructor(hide = false) {
+		const htmlString = `
       <div
         class="settings-container d-flex justify-content-center align-items-center vw-100 vh-100"
         style="pointer-events: none"
@@ -51,33 +51,33 @@ class CenteredWindow extends SBWin {
         </div>
       </div>
     `;
-    super(htmlString);
-  }
+		super(htmlString);
+	}
 
-  async init() {
-    this.getEl("form").addEventListener("submit", async (e) => {
-      console.log("submit");
-      e.preventDefault();
-      e.stopPropagation();
+	async init() {
+		this.getEl("form").addEventListener("submit", async (e) => {
+			console.log("submit");
+			e.preventDefault();
+			e.stopPropagation();
 
-      const formData = new FormData(e.target); // 'event.target' refers to the form element
+			const formData = new FormData(e.target); // 'event.target' refers to the form element
 
-      // Iterate over the form data
-      formData.forEach((value, key) => {
-        console.log(`${key}: ${value}`);
-      });
-    });
+			// Iterate over the form data
+			formData.forEach((value, key) => {
+				console.log(`${key}: ${value}`);
+			});
+		});
 
-    this.getEl(".settings-close-btn").addEventListener("click", async () => {
-      console.log("close");
-      this.hide();
-    });
-  }
+		this.getEl(".settings-close-btn").addEventListener("click", async () => {
+			console.log("close");
+			this.hide();
+		});
+	}
 }
 
 class FloatingButton extends SBWin {
-  constructor(hide = false) {
-    const htmlString = `
+	constructor(hide = false) {
+		const htmlString = `
       <div class="floating-button-container position-fixed bottom-0 end-0" style="pointer-events: auto">
         <button class="floating-button-btn btn btn-primary rounded-circle m-3 z-3 w-3 h-3" style="width: 60px; height: 60px; font-size: 24px">
           <!-- <i class="bi bi-plus-lg"></i> -->
@@ -87,24 +87,24 @@ class FloatingButton extends SBWin {
         </button>
       </div>
     `;
-    super(htmlString);
-  }
+		super(htmlString);
+	}
 
-  async init() {
-    this.getEl(".floating-button-btn").addEventListener("click", async (e) => {
-      console.log("click");
-      e.preventDefault();
-      e.stopPropagation();
+	async init() {
+		this.getEl(".floating-button-btn").addEventListener("click", async (e) => {
+			console.log("click");
+			e.preventDefault();
+			e.stopPropagation();
 
-      // document.body.style.backgroundColor = "lightblue";
-      ShadowBootstrap.get(CenteredWindow).show();
-    });
-  }
+			// document.body.style.backgroundColor = "lightblue";
+			ShadowBootstrap.get(CenteredWindow).show();
+		});
+	}
 }
 
 class SideButton extends SBWin {
-  constructor() {
-    const htmlString = `
+	constructor() {
+		const htmlString = `
     <div style="pointer-events: auto">
       <div class="side-button-container d-flex position-fixed opacity-25 bg-primary rounded-start" style="top: 50%; transition: right 0.3s">
         <button class="toggle-button-btn btn btn-primary rounded-0 rounded-start">&nbsp;</button>
@@ -112,95 +112,95 @@ class SideButton extends SBWin {
       </div>
     </div>
     `;
-    super(htmlString);
-  }
+		super(htmlString);
+	}
 
-  async init() {
-    const buttonContainer = this.getEl(".side-button-container") || missing();
-    const toggleButton = this.getEl(".toggle-button-btn") || missing();
-    const actionButton = this.getEl(".action-button-btn") || missing();
-    let isVisible = false;
-    let isDragging = false;
-    let offsetY = 0;
+	async init() {
+		const buttonContainer = this.getEl(".side-button-container") || missing();
+		const toggleButton = this.getEl(".toggle-button-btn") || missing();
+		const actionButton = this.getEl(".action-button-btn") || missing();
+		let isVisible = false;
+		let isDragging = false;
+		let offsetY = 0;
 
-    let maxWidth = 0;
-    this.rootEl.querySelectorAll(".action-button-btn").forEach((btn) => {
-      const btnWidth = btn.getBoundingClientRect().width;
-      if (btnWidth > maxWidth) maxWidth = btnWidth;
-    });
+		let maxWidth = 0;
+		for (const btm of this.rootEl.querySelectorAll(".action-button-btn")) {
+			const btnWidth = btn.getBoundingClientRect().width;
+			if (btnWidth > maxWidth) maxWidth = btnWidth;
+		}
 
-    buttonContainer.style.right = `-${maxWidth}px`;
+		buttonContainer.style.right = `-${maxWidth}px`;
 
-    actionButton.addEventListener("click", (e) => {
-      const popup = new SBPopUp("Finished");
-      ShadowBootstrap.add(popup);
-      popup.show();
-    });
+		actionButton.addEventListener("click", (e) => {
+			const popup = new SBPopUp("Finished");
+			ShadowBootstrap.add(popup);
+			popup.show();
+		});
 
-    toggleButton.addEventListener("click", (e) => {
-      // if (isDragging) return;
-      isVisible = !isVisible;
-      buttonContainer.style.right = isVisible ? "0px" : `-${maxWidth}px`;
-      if (isVisible) {
-        buttonContainer.classList.remove("opacity-25");
-        buttonContainer.classList.add("opacity-100");
-      } else {
-        buttonContainer.classList.remove("opacity-100");
-        buttonContainer.classList.add("opacity-25");
-      }
-      e.preventDefault();
-    });
+		toggleButton.addEventListener("click", (e) => {
+			// if (isDragging) return;
+			isVisible = !isVisible;
+			buttonContainer.style.right = isVisible ? "0px" : `-${maxWidth}px`;
+			if (isVisible) {
+				buttonContainer.classList.remove("opacity-25");
+				buttonContainer.classList.add("opacity-100");
+			} else {
+				buttonContainer.classList.remove("opacity-100");
+				buttonContainer.classList.add("opacity-25");
+			}
+			e.preventDefault();
+		});
 
-    toggleButton.addEventListener("mousedown", function (e) {
-      isDragging = true;
-      const rect = buttonContainer.getBoundingClientRect();
-      offsetY = e.clientY - rect.top;
-      e.preventDefault(); // Prevent text selection
-    });
+		toggleButton.addEventListener("mousedown", (e) => {
+			isDragging = true;
+			const rect = buttonContainer.getBoundingClientRect();
+			offsetY = e.clientY - rect.top;
+			e.preventDefault(); // Prevent text selection
+		});
 
-    document.addEventListener("mousemove", function (e) {
-      if (!isDragging) return;
+		document.addEventListener("mousemove", (e) => {
+			if (!isDragging) return;
 
-      // Calculate new position for the button container
-      const y = e.clientY - offsetY;
+			// Calculate new position for the button container
+			const y = e.clientY - offsetY;
 
-      // Keep button container within the viewport
-      const maxY = window.innerHeight - buttonContainer.offsetHeight;
-      const clampedY = Math.max(0, Math.min(y, maxY));
+			// Keep button container within the viewport
+			const maxY = window.innerHeight - buttonContainer.offsetHeight;
+			const clampedY = Math.max(0, Math.min(y, maxY));
 
-      buttonContainer.style.top = `${clampedY}px`;
-    });
+			buttonContainer.style.top = `${clampedY}px`;
+		});
 
-    document.addEventListener("mouseup", function () {
-      isDragging = false;
-    });
+		document.addEventListener("mouseup", () => {
+			isDragging = false;
+		});
 
-    buttonContainer.addEventListener("mouseenter", function () {
-      // TODO Open
-      // buttonContainer.style.right = "0px";
-      // isVisible = true;
-      buttonContainer.classList.remove("opacity-25");
-      buttonContainer.classList.add("opacity-100");
-    });
+		buttonContainer.addEventListener("mouseenter", () => {
+			// TODO Open
+			// buttonContainer.style.right = "0px";
+			// isVisible = true;
+			buttonContainer.classList.remove("opacity-25");
+			buttonContainer.classList.add("opacity-100");
+		});
 
-    buttonContainer.addEventListener("mouseleave", function () {
-      if (!isVisible) {
-        buttonContainer.classList.remove("opacity-100");
-        buttonContainer.classList.add("opacity-25");
-      }
-    });
-  }
+		buttonContainer.addEventListener("mouseleave", () => {
+			if (!isVisible) {
+				buttonContainer.classList.remove("opacity-100");
+				buttonContainer.classList.add("opacity-25");
+			}
+		});
+	}
 }
 
 // biome-ignore lint/complexity/useArrowFunction: <explanation>
 (async function () {
-  "use strict";
+	"use strict";
 
-  await ShadowBootstrap.init();
+	await ShadowBootstrap.init();
 
-  ShadowBootstrap.add(new CenteredWindow().hide());
-  ShadowBootstrap.add(new FloatingButton());
-  ShadowBootstrap.add(new SideButton());
+	ShadowBootstrap.add(new CenteredWindow().hide());
+	ShadowBootstrap.add(new FloatingButton());
+	ShadowBootstrap.add(new SideButton());
 
-  console.log(ShadowBootstrap.get(FloatingButton).rootEl);
+	console.log(ShadowBootstrap.get(FloatingButton).rootEl);
 })();
