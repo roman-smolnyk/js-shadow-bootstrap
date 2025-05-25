@@ -5,12 +5,12 @@
 // @version      0.0.3
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=getbootstrap.com
 // @description  Set of examples for ShadowBootstrap
-// @require      https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.1.3/shadow-bootstrap.js
-// @require      https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js
 // @match        *://*/*
 // @run-at context-menu
 // @grant        none
 // ==/UserScript==
+
+// <import>shadow-bootstrap.js</import>
 
 function missing(name) {
   throw new Error(`Missing: ${name}`);
@@ -110,7 +110,13 @@ class FloatingButton extends SBWin {
 
   ShadowBootstrap.add(new CenteredWindow().hide());
   ShadowBootstrap.add(new FloatingButton());
-  ShadowBootstrap.add(new RightSideMovableButton());
+  const rButton = new RightSideMovableButton();
+  rButton.onclick(() => {
+    const popup = new SBPopUp("Finished");
+    ShadowBootstrap.add(popup);
+    popup.show();
+  });
+  ShadowBootstrap.add(rButton);
 
   console.log(ShadowBootstrap.get(FloatingButton).rootEl);
 })();

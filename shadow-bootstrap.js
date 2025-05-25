@@ -21,169 +21,169 @@ const __bootstapJsBase64 = `
 `;
 
 class ShadowBootstrap {
-	// Creates shadow DOM, imports styles there and icons(main doc header because of the issues with fonts) and creates full screen container
-	// const shadowRoot = document.querySelector(`.${ShadowBootstrap.SHADOW_HOST_CLASS}`).shadowRoot
-	static SHADOW_HOST_CLASS = "bootstrap-shadow-dom-host";
-	static SHADOW_HOST = null;
-	static SHADOW_CONTAINER_CLASS = "bootstrap-shadow-dom-container";
-	static SHADOW_CONTAINER = null;
-	static SHADOW_ROOT = null;
-	static WINDOWS = new Map();
-	constructor() {}
+  // Creates shadow DOM, imports styles there and icons(main doc header because of the issues with fonts) and creates full screen container
+  // const shadowRoot = document.querySelector(`.${ShadowBootstrap.SHADOW_HOST_CLASS}`).shadowRoot
+  static SHADOW_HOST_CLASS = "bootstrap-shadow-dom-host";
+  static SHADOW_HOST = null;
+  static SHADOW_CONTAINER_CLASS = "bootstrap-shadow-dom-container";
+  static SHADOW_CONTAINER = null;
+  static SHADOW_ROOT = null;
+  static WINDOWS = new Map();
+  constructor() {}
 
-	static async bootstrapCss(raw = true) {
-		//     const testEl = document.createElement("div");
-		// testEl.className = "d-none"; // A Bootstrap utility class
-		// document.body.appendChild(testEl);
+  static async bootstrapCss(raw = true) {
+    //     const testEl = document.createElement("div");
+    // testEl.className = "d-none"; // A Bootstrap utility class
+    // document.body.appendChild(testEl);
 
-		// const isBootstrapCssLoaded = getComputedStyle(testEl).display === "none";
+    // const isBootstrapCssLoaded = getComputedStyle(testEl).display === "none";
 
-		// testEl.remove();
+    // testEl.remove();
 
-		// if (isBootstrapCssLoaded) {
-		//   console.log("Bootstrap CSS is active.");
-		// }
+    // if (isBootstrapCssLoaded) {
+    //   console.log("Bootstrap CSS is active.");
+    // }
 
-		let css = __bootstrapCss.trim();
-		if (raw === false) {
-			// Mostly for example
-			const response = await fetch(
-				"https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css",
-			);
-			css = await response.text();
-		}
-		const bootstrapStyle = document.createElement("style");
-		// Replace :root with :host to scope variables to Shadow DOM. as root variables only apllied if it is root of the document
-		bootstrapStyle.textContent = css.replace(/:root/g, ":host");
-		return bootstrapStyle;
-	}
+    let css = __bootstrapCss.trim();
+    if (raw === false) {
+      // Mostly for example
+      const response = await fetch(
+        "https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css",
+      );
+      css = await response.text();
+    }
+    const bootstrapStyle = document.createElement("style");
+    // Replace :root with :host to scope variables to Shadow DOM. as root variables only apllied if it is root of the document
+    bootstrapStyle.textContent = css.replace(/:root/g, ":host");
+    return bootstrapStyle;
+  }
 
-	static async bootstrapIconsCss(raw = false) {
-		// it does not work in shadow dom so you should add it to the main web page header
-		// in case of cors issues you can use method from styleBootstrap
+  static async bootstrapIconsCss(raw = false) {
+    // it does not work in shadow dom so you should add it to the main web page header
+    // in case of cors issues you can use method from styleBootstrap
 
-		// const bootstrapIconsLink = document.createElement("link");
-		// bootstrapIconsLink.rel = "stylesheet";
-		// bootstrapIconsLink.href = "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css";
-		// return bootstrapIconsLink;
+    // const bootstrapIconsLink = document.createElement("link");
+    // bootstrapIconsLink.rel = "stylesheet";
+    // bootstrapIconsLink.href = "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css";
+    // return bootstrapIconsLink;
 
-		let css = __bootstrapIconsCss.trim();
-		if (raw === false) {
-			// Mostly for example
-			const response = await fetch(
-				"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css",
-			);
-			css = await response.text();
-		}
-		const bootstrapIconsStyle = document.createElement("style");
-		// Replace :root with :host to scope variables to Shadow DOM. as root variables only apllied if it is root of the document
-		bootstrapIconsStyle.textContent = css.replace(/:root/g, ":host");
-		return bootstrapIconsStyle;
-	}
+    let css = __bootstrapIconsCss.trim();
+    if (raw === false) {
+      // Mostly for example
+      const response = await fetch(
+        "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css",
+      );
+      css = await response.text();
+    }
+    const bootstrapIconsStyle = document.createElement("style");
+    // Replace :root with :host to scope variables to Shadow DOM. as root variables only apllied if it is root of the document
+    bootstrapIconsStyle.textContent = css.replace(/:root/g, ":host");
+    return bootstrapIconsStyle;
+  }
 
-	static async bootstrapJs(raw = true) {
-		if (window.bootstrap) {
-			console.warn("Bootstrap js is already loaded.");
-			// throw new Error("Bootstrap js is already loaded.");
-		}
-		const bootstrapScript = document.createElement("script");
-		if (raw === false) {
-			bootstrapScript.src =
-				"https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js";
-			bootstrapScript.defer = true; // Load right before DOMContentLoaded
-		} else {
-			bootstrapScript.textContent = atob(__bootstapJsBase64.trim());
-		}
-		return bootstrapScript;
-	}
+  static async bootstrapJs(raw = true) {
+    if (window.bootstrap) {
+      console.warn("Bootstrap js is already loaded.");
+      // throw new Error("Bootstrap js is already loaded.");
+    }
+    const bootstrapScript = document.createElement("script");
+    if (raw === false) {
+      bootstrapScript.src =
+        "https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js";
+      bootstrapScript.defer = true; // Load right before DOMContentLoaded
+    } else {
+      bootstrapScript.textContent = atob(__bootstapJsBase64.trim());
+    }
+    return bootstrapScript;
+  }
 
-	static async init() {
-		// Create container and attach to body
-		const shadowHost = document.createElement("div");
-		document.body.appendChild(shadowHost);
-		Object.assign(shadowHost.style, {
-			position: "fixed",
-			top: "0",
-			left: "0",
-			width: "100vw",
-			height: "100vh",
-			zIndex: "99999",
-			pointerEvents: "none", // Let clicks through except content
-		});
-		shadowHost.classList.add(ShadowBootstrap.SHADOW_HOST_CLASS);
+  static async init() {
+    // Create container and attach to body
+    const shadowHost = document.createElement("div");
+    document.body.appendChild(shadowHost);
+    Object.assign(shadowHost.style, {
+      position: "fixed",
+      top: "0",
+      left: "0",
+      width: "100vw",
+      height: "100vh",
+      zIndex: "99999",
+      pointerEvents: "none", // Let clicks through except content
+    });
+    shadowHost.classList.add(ShadowBootstrap.SHADOW_HOST_CLASS);
 
-		const shadowRoot = shadowHost.attachShadow({ mode: "open" });
+    const shadowRoot = shadowHost.attachShadow({ mode: "open" });
 
-		const bootstrapIconsCss = await ShadowBootstrap.bootstrapIconsCss();
-		document.querySelector("head").appendChild(bootstrapIconsCss);
-		shadowRoot.append(bootstrapIconsCss.cloneNode(true));
+    const bootstrapIconsCss = await ShadowBootstrap.bootstrapIconsCss();
+    document.querySelector("head").appendChild(bootstrapIconsCss);
+    shadowRoot.append(bootstrapIconsCss.cloneNode(true));
 
-		shadowRoot.appendChild(await ShadowBootstrap.bootstrapCss());
+    shadowRoot.appendChild(await ShadowBootstrap.bootstrapCss());
 
-		const shadowContainer = document.createElement("div");
-		shadowContainer.classList.add(ShadowBootstrap.SHADOW_CONTAINER_CLASS);
-		shadowRoot.append(shadowContainer);
+    const shadowContainer = document.createElement("div");
+    shadowContainer.classList.add(ShadowBootstrap.SHADOW_CONTAINER_CLASS);
+    shadowRoot.append(shadowContainer);
 
-		shadowRoot.appendChild(await ShadowBootstrap.bootstrapJs());
+    shadowRoot.appendChild(await ShadowBootstrap.bootstrapJs());
 
-		ShadowBootstrap.SHADOW_HOST = shadowHost;
-		ShadowBootstrap.SHADOW_ROOT = shadowRoot;
-		ShadowBootstrap.SHADOW_CONTAINER = shadowContainer;
+    ShadowBootstrap.SHADOW_HOST = shadowHost;
+    ShadowBootstrap.SHADOW_ROOT = shadowRoot;
+    ShadowBootstrap.SHADOW_CONTAINER = shadowContainer;
 
-		return shadowContainer;
-	}
+    return shadowContainer;
+  }
 
-	static add(win) {
-		ShadowBootstrap.SHADOW_CONTAINER.append(win.rootEl);
-		ShadowBootstrap.WINDOWS.set(win.constructor, win);
-		win.init(); // This is async!!!
-	}
+  static add(win) {
+    ShadowBootstrap.SHADOW_CONTAINER.append(win.rootEl);
+    ShadowBootstrap.WINDOWS.set(win.constructor, win);
+    win.init(); // This is async!!!
+  }
 
-	static get(win) {
-		return ShadowBootstrap.WINDOWS.get(win);
-	}
+  static get(win) {
+    return ShadowBootstrap.WINDOWS.get(win);
+  }
 
-	static del(win) {
-		ShadowBootstrap.WINDOWS.delete(win.constructor);
-	}
+  static del(win) {
+    ShadowBootstrap.WINDOWS.delete(win.constructor);
+  }
 }
 
 class SBWin {
-	constructor(htmlString) {
-		this.rootEl = this._parse(htmlString);
-		// this.rootEl.style.pointerEvents = "auto";
-	}
+  constructor(htmlString) {
+    this.rootEl = this._parse(htmlString);
+    // this.rootEl.style.pointerEvents = "auto";
+  }
 
-	async init() {}
+  async init() {}
 
-	_parse(htmlString) {
-		const parser = new DOMParser();
-		return parser.parseFromString(htmlString, "text/html").body.firstChild;
-	}
+  _parse(htmlString) {
+    const parser = new DOMParser();
+    return parser.parseFromString(htmlString, "text/html").body.firstChild;
+  }
 
-	show() {
-		this.rootEl.classList.remove("d-none");
-		return this;
-	}
+  show() {
+    this.rootEl.classList.remove("d-none");
+    return this;
+  }
 
-	hide() {
-		this.rootEl.classList.add("d-none");
-		return this;
-	}
+  hide() {
+    this.rootEl.classList.add("d-none");
+    return this;
+  }
 
-	destroy() {
-		this.rootEl.remove();
-		ShadowBootstrap.del(this);
-	}
+  destroy() {
+    this.rootEl.remove();
+    ShadowBootstrap.del(this);
+  }
 
-	getEl(selector) {
-		return this.rootEl.querySelector(selector);
-	}
+  getEl(selector) {
+    return this.rootEl.querySelector(selector);
+  }
 }
 
 class SBPopUp extends SBWin {
-	constructor(text, color = "success") {
-		const htmlString = `
+  constructor(text, color = "success") {
+    const htmlString = `
     <div class="position-fixed top-0 start-50 translate-middle-x p-3 w-100" style="max-width: 360px; z-index: 1055">
       <div id="myToast" class="toast align-items-center text-bg-${color} border-0 w-100" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
         <div class="d-flex">
@@ -193,16 +193,104 @@ class SBPopUp extends SBWin {
       </div>
     </div>
     `;
-		super(htmlString);
-	}
+    super(htmlString);
+  }
 
-	show() {
-		const toastEl = this.rootEl.querySelector(".toast");
-		const toast = new bootstrap.Toast(toastEl);
-		toast.show();
-		// prettier-ignore
-		toastEl.addEventListener("hidden.bs.toast", () =>
-			setTimeout(() => this.destroy(), 500),
-		);
-	}
+  show() {
+    const toastEl = this.rootEl.querySelector(".toast");
+    const toast = new bootstrap.Toast(toastEl);
+    toast.show();
+    // prettier-ignore
+    toastEl.addEventListener("hidden.bs.toast", () =>
+      setTimeout(() => this.destroy(), 500),
+    );
+  }
+}
+
+class RightSideMovableButton extends SBWin {
+  constructor(title = "Action") {
+    const htmlString = `
+    <div style="pointer-events: auto">
+      <div class="side-button-container d-flex position-fixed opacity-25 bg-primary rounded-start" style="top: 50%; transition: right 0.3s">
+        <button class="toggle-button-btn btn btn-primary rounded-0 rounded-start">&nbsp;</button>
+        <button class="action-button-btn btn btn-success">${title}</button>
+      </div>
+    </div>
+    `;
+    super(htmlString);
+  }
+
+  async init() {
+    const buttonContainer = this.getEl(".side-button-container");
+    const toggleButton = this.getEl(".toggle-button-btn");
+    let isVisible = false;
+    let isDragging = false;
+    let offsetY = 0;
+
+    let maxWidth = 0;
+    for (const btn of this.rootEl.querySelectorAll(".action-button-btn")) {
+      const btnWidth = btn.getBoundingClientRect().width;
+      if (btnWidth > maxWidth) maxWidth = btnWidth;
+    }
+
+    buttonContainer.style.right = `-${maxWidth}px`;
+
+    toggleButton.addEventListener("click", (e) => {
+      // if (isDragging) return;
+      isVisible = !isVisible;
+      buttonContainer.style.right = isVisible ? "0px" : `-${maxWidth}px`;
+      if (isVisible) {
+        buttonContainer.classList.remove("opacity-25");
+        buttonContainer.classList.add("opacity-100");
+      } else {
+        buttonContainer.classList.remove("opacity-100");
+        buttonContainer.classList.add("opacity-25");
+      }
+      e.preventDefault();
+    });
+
+    toggleButton.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      const rect = buttonContainer.getBoundingClientRect();
+      offsetY = e.clientY - rect.top;
+      e.preventDefault(); // Prevent text selection
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      if (!isDragging) return;
+
+      // Calculate new position for the button container
+      const y = e.clientY - offsetY;
+
+      // Keep button container within the viewport
+      const maxY = window.innerHeight - buttonContainer.offsetHeight;
+      const clampedY = Math.max(0, Math.min(y, maxY));
+
+      buttonContainer.style.top = `${clampedY}px`;
+    });
+
+    document.addEventListener("mouseup", () => {
+      isDragging = false;
+    });
+
+    buttonContainer.addEventListener("mouseenter", () => {
+      // TODO Open
+      // buttonContainer.style.right = "0px";
+      // isVisible = true;
+      buttonContainer.classList.remove("opacity-25");
+      buttonContainer.classList.add("opacity-100");
+    });
+
+    buttonContainer.addEventListener("mouseleave", () => {
+      if (!isVisible) {
+        buttonContainer.classList.remove("opacity-100");
+        buttonContainer.classList.add("opacity-25");
+      }
+    });
+  }
+
+  onclick(callback) {
+    const actionButton = this.getEl(".action-button-btn");
+    actionButton.addEventListener("click", callback);
+  }
 }

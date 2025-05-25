@@ -7,9 +7,9 @@
 ## jsdelivr
 
 ```
-https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.1.2/shadow-bootstrap.js
+https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.1.3/shadow-bootstrap.js
 ```
 
 ```
-https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.1.2/shadow-bootstrap.min.js
+https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.1.3/shadow-bootstrap.min.js
 ```
