@@ -299,7 +299,7 @@ class FloatingButton extends SBWin {
   constructor() {
     const htmlString = `
         <div class="floating-button-container position-fixed bottom-0 end-0" style="pointer-events: auto">
-            <button class="floating-button-btn btn btn-primary rounded-circle m-3 z-3 w-3 h-3"
+            <button class="action-button-btn btn btn-primary rounded-circle m-3 z-3 w-3 h-3"
                 style="width: 60px; height: 60px; font-size: 24px">
                 <div class="icon">
                     <!-- <i class="bi bi-plus-lg"></i> -->
@@ -319,7 +319,7 @@ class FloatingButton extends SBWin {
 
   setIcon(svgHtml) {
     const iconDiv = this.getEl(".icon");
-    iconDiv.innerHtml = svgHtml;
+    iconDiv.innerHTML = svgHtml;
   }
 
   onclick(callback) {
