@@ -2,15 +2,15 @@
 // @name         ShadowBootstrap
 // @namespace    http://tampermonkey.net/
 // @author       poma23324
-// @version      0.0.3
+// @version      0.0.1
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=getbootstrap.com
 // @description  Set of examples for ShadowBootstrap
+// @require      https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.1.3/shadow-bootstrap.js
+// @require      https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js
 // @match        *://*/*
 // @run-at context-menu
 // @grant        none
 // ==/UserScript==
-
-// <import>shadow-bootstrap.js</import>
 
 function missing(name) {
   throw new Error(`Missing: ${name}`);
@@ -75,33 +75,6 @@ class CenteredWindow extends SBWin {
   }
 }
 
-class FloatingButton extends SBWin {
-  constructor(hide = false) {
-    const htmlString = `
-      <div class="floating-button-container position-fixed bottom-0 end-0" style="pointer-events: auto">
-        <button class="floating-button-btn btn btn-primary rounded-circle m-3 z-3 w-3 h-3" style="width: 60px; height: 60px; font-size: 24px">
-          <!-- <i class="bi bi-plus-lg"></i> -->
-          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
-</svg>
-        </button>
-      </div>
-    `;
-    super(htmlString);
-  }
-
-  async init() {
-    this.getEl(".floating-button-btn").addEventListener("click", async (e) => {
-      console.log("click");
-      e.preventDefault();
-      e.stopPropagation();
-
-      // document.body.style.backgroundColor = "lightblue";
-      ShadowBootstrap.get(CenteredWindow).show();
-    });
-  }
-}
-
 // biome-ignore lint/complexity/useArrowFunction: <explanation>
 (async function () {
   "use strict";
@@ -110,13 +83,10 @@ class FloatingButton extends SBWin {
 
   ShadowBootstrap.add(new CenteredWindow().hide());
   ShadowBootstrap.add(new FloatingButton());
-  const rButton = new RightSideMovableButton();
-  rButton.onclick(() => {
-    const popup = new SBPopUp("Finished");
-    ShadowBootstrap.add(popup);
-    popup.show();
+  ShadowBootstrap.get(FloatingButton).onclick(() => {
+    ShadowBootstrap.get(CenteredWindow).show();
   });
-  ShadowBootstrap.add(rButton);
+  ShadowBootstrap.add(new RightSideMovableButton());
 
   console.log(ShadowBootstrap.get(FloatingButton).rootEl);
 })();

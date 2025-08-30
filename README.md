@@ -1,4 +1,4 @@
-# js-bootstrap-ext
+# js-shadow-bootstrap
 
 ## You can also @require bootstrap js for problematic pages
 
@@ -7,9 +7,9 @@
 ## jsdelivr
 
 ```
-https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.1.3/shadow-bootstrap.js
+https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.1.4/shadow-bootstrap.js
 ```
 
 ```
-https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.1.3/shadow-bootstrap.min.js
+https://cdn.jsdelivr.net/gh/roman-smolnyk/js-shadow-bootstrap@v0.1.4/shadow-bootstrap.min.js
 ```
